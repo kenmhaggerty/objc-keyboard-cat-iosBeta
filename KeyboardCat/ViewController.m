@@ -26,6 +26,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillDisappear:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [self.imageView setUserInteractionEnabled:YES];
+    [self.imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewWasTapped:)]];
 }
 
 - (void)keyboardWillAppear:(NSNotification *)notification
@@ -34,7 +37,7 @@
     NSTimeInterval animationDuration = 0;
     [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
     
-    [self.constraintTextFieldBottom setConstant:self.constraintTextFieldBottom.constant+keyboardRect.size.height];
+    [self.constraintTextFieldBottom setConstant:20.0f+keyboardRect.size.height];
     [self.view setNeedsUpdateConstraints];
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
@@ -51,6 +54,11 @@
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
     }];
+}
+
+- (void)imageViewWasTapped:(UITapGestureRecognizer *)tapGestureRecognizer
+{
+    [self.view endEditing:YES];
 }
 
 @end
