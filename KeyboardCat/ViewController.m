@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *constraintTextFieldBottom;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *constraintImageViewBottom;
 
 @end
 
@@ -38,6 +39,7 @@
     [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
     
     [self.constraintTextFieldBottom setConstant:20.0f+keyboardRect.size.height];
+    [self.constraintImageViewBottom setConstant:keyboardRect.size.height];
     [self.view setNeedsUpdateConstraints];
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
@@ -50,6 +52,7 @@
     [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
     
     [self.constraintTextFieldBottom setConstant:20.0f];
+    [self.constraintImageViewBottom setConstant:0.0f];
     [self.view setNeedsUpdateConstraints];
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
