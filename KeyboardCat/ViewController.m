@@ -26,8 +26,8 @@
     self.imageView.image = catImage;
     
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeSize:) name:UIKeyboardWillChangeFrameNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillDisappear:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidChange:) name:UIKeyboardWillHideNotification object:nil];
     
     [self.imageView setUserInteractionEnabled:YES];
     [self.imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewWasTapped:)]];
@@ -47,28 +47,44 @@
 //    }];
 //}
 
-- (void)keyboardWillChangeSize:(NSNotification *)notification
+//- (void)keyboardWillChangeSize:(NSNotification *)notification
+//{
+//    CGRect keyboardRect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+//    NSTimeInterval animationDuration = 0;
+//    [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+//    
+//    [self.constraintTextFieldBottom setConstant:20.0f+keyboardRect.size.height];
+//    [self.constraintImageViewBottom setConstant:keyboardRect.size.height];
+//    [self.view setNeedsUpdateConstraints];
+//    [UIView animateWithDuration:animationDuration animations:^{
+//        [UIView setAnimationCurve:[[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+//        [self.view layoutIfNeeded];
+//    }];
+//}
+//
+//- (void)keyboardWillDisappear:(NSNotification *)notification
+//{
+//    NSTimeInterval animationDuration = 0;
+//    [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+//    
+//    [self.constraintTextFieldBottom setConstant:20.0f];
+//    [self.constraintImageViewBottom setConstant:0.0f];
+//    [self.view setNeedsUpdateConstraints];
+//    [UIView animateWithDuration:animationDuration animations:^{
+//        [UIView setAnimationCurve:[[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+//        [self.view layoutIfNeeded];
+//    }];
+//}
+
+- (void)keyboardDidChange:(NSNotification *)notification
 {
     CGRect keyboardRect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     NSTimeInterval animationDuration = 0;
     [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    BOOL hideKeyboard = [notification.name isEqualToString:UIKeyboardWillHideNotification];
     
-    [self.constraintTextFieldBottom setConstant:20.0f+keyboardRect.size.height];
-    [self.constraintImageViewBottom setConstant:keyboardRect.size.height];
-    [self.view setNeedsUpdateConstraints];
-    [UIView animateWithDuration:animationDuration animations:^{
-        [UIView setAnimationCurve:[[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-        [self.view layoutIfNeeded];
-    }];
-}
-
-- (void)keyboardWillDisappear:(NSNotification *)notification
-{
-    NSTimeInterval animationDuration = 0;
-    [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-    
-    [self.constraintTextFieldBottom setConstant:20.0f];
-    [self.constraintImageViewBottom setConstant:0.0f];
+    [self.constraintTextFieldBottom setConstant:20.0f+(hideKeyboard ? 0.0f : keyboardRect.size.height)];
+    [self.constraintImageViewBottom setConstant:(hideKeyboard ? 0.0f : keyboardRect.size.height)];
     [self.view setNeedsUpdateConstraints];
     [UIView animateWithDuration:animationDuration animations:^{
         [UIView setAnimationCurve:[[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
