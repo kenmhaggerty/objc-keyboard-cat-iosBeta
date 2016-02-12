@@ -57,6 +57,7 @@
     [self.constraintImageViewBottom setConstant:keyboardRect.size.height];
     [self.view setNeedsUpdateConstraints];
     [UIView animateWithDuration:animationDuration animations:^{
+        [UIView setAnimationCurve:[[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
         [self.view layoutIfNeeded];
     }];
 }
@@ -70,6 +71,7 @@
     [self.constraintImageViewBottom setConstant:0.0f];
     [self.view setNeedsUpdateConstraints];
     [UIView animateWithDuration:animationDuration animations:^{
+        [UIView setAnimationCurve:[[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue]];
         [self.view layoutIfNeeded];
     }];
 }
