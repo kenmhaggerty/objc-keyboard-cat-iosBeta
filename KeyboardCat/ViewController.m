@@ -11,6 +11,7 @@
 @interface ViewController ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *constraintTextFieldBottom;
 
 @end
 
@@ -29,12 +30,27 @@
 
 - (void)keyboardWillAppear:(NSNotification *)notification
 {
-    //
+    CGRect keyboardRect = [[notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    NSTimeInterval animationDuration = 0;
+    [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    
+    [self.constraintTextFieldBottom setConstant:self.constraintTextFieldBottom.constant+keyboardRect.size.height];
+    [self.view setNeedsUpdateConstraints];
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
 }
 
 - (void)keyboardWillDisappear:(NSNotification *)notification
 {
-    //
+    NSTimeInterval animationDuration = 0;
+    [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    
+    [self.constraintTextFieldBottom setConstant:20.0f];
+    [self.view setNeedsUpdateConstraints];
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
 }
 
 @end
