@@ -25,16 +25,31 @@
     UIImage *catImage = [UIImage animatedImageNamed:@"keyboard-cat-" duration:3];
     self.imageView.image = catImage;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:) name:UIKeyboardWillShowNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeSize:) name:UIKeyboardWillChangeFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillDisappear:) name:UIKeyboardWillHideNotification object:nil];
     
     [self.imageView setUserInteractionEnabled:YES];
     [self.imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewWasTapped:)]];
 }
 
-- (void)keyboardWillAppear:(NSNotification *)notification
+//- (void)keyboardWillAppear:(NSNotification *)notification
+//{
+//    CGRect keyboardRect = [[notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+//    NSTimeInterval animationDuration = 0;
+//    [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+//    
+//    [self.constraintTextFieldBottom setConstant:20.0f+keyboardRect.size.height];
+//    [self.constraintImageViewBottom setConstant:keyboardRect.size.height];
+//    [self.view setNeedsUpdateConstraints];
+//    [UIView animateWithDuration:animationDuration animations:^{
+//        [self.view layoutIfNeeded];
+//    }];
+//}
+
+- (void)keyboardWillChangeSize:(NSNotification *)notification
 {
-    CGRect keyboardRect = [[notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect keyboardRect = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     NSTimeInterval animationDuration = 0;
     [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
     
